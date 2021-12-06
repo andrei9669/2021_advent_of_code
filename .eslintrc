@@ -1,0 +1,6 @@
+{
+  "extends": ["@templeio/eslint-config-templeio"],
+  "rules": {
+    "no-console": 0
+  }
+}
