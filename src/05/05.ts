@@ -4,6 +4,7 @@ import path from 'path';
 const input = fs.readFileSync(path.join(__dirname, 'input.txt'), 'utf-8');
 
 const data = input
+  .trim()
   .split('\n')
   .map((el) => el.split(' -> ').map((el2) => el2.split(',').map(Number)));
 
