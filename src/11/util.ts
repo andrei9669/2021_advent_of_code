@@ -22,20 +22,18 @@ function* coords() {
 }
 
 export const flash =
-  (y: number, callback?: () => void) =>
-  ([oct]: [number, boolean], x: number, arr: [number, boolean][][]): void => {
+  (y: number, arr: [number, boolean][][], flashCountCallback?: () => void) =>
+  ([oct]: [number, boolean], x: number): void => {
     if (oct > 9) {
-      callback?.();
+      flashCountCallback?.();
       arr[y][x] = [0, false];
       // eslint-disable-next-line no-restricted-syntax -- using generator
       for (const [Y, X] of coords()) {
-        const [num, bool] = arr[y + Y]?.[x + X] ?? [0, false];
-        if (bool) {
-          if (num + 1 > 9) {
-            flash(y + Y, callback)([num + 1, true], x + X, arr);
-          } else {
-            arr[y + Y][x + X] = [num + 1, true];
-          }
+        const [num, notFlashed] = arr[y + Y]?.[x + X] ?? [0, false];
+        if (num + 1 > 9 && notFlashed) {
+          flash(y + Y, arr, flashCountCallback)([num + 1, true], x + X);
+        } else if (notFlashed) {
+          arr[y + Y][x + X] = [num + 1, true];
         }
       }
     }

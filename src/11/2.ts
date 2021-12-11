@@ -9,13 +9,7 @@ const run = (arr: [number, boolean][][]): number => {
         arr[y][x] = [num + 1, true];
       });
     });
-    arr.forEach((row, y) =>
-      row.forEach((oct, x) => {
-        if (oct[0] > 9) {
-          flash(y)(oct, x, arr);
-        }
-      }),
-    );
+    arr.forEach((row, y) => row.forEach(flash(y, arr)));
     finish = arr.every((row) => row.every(([, oct]) => oct));
   }
   return steps;
