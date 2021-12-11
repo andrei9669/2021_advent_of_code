@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 const input = fs.readFileSync(path.join(__dirname, 'input.txt'), 'utf-8');
-const data = input.split('\n').map(Number);
+const data = input.trim().split('\n').map(Number);
 
 const getElementsSum = (i: number) =>
   data.slice(i, i + 3).reduce((acc, cur) => acc + cur, 0);

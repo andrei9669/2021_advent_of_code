@@ -8,7 +8,7 @@ const data = input
   .split('\n')
   .map((el) => el.split(' -> ').map((el2) => el2.split(',').map(Number)));
 
-const run = () => {
+const run = (): number => {
   const map: number[][] = [];
   const mark = (x1: number, y1: number) => {
     if (map[y1] === undefined) {
