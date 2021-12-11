@@ -1040,25 +1040,6 @@ const bin2dec = (binStr: string) =>
 // const epsilonRate = bin2dec(bitFlipped);
 // endregion
 
-const testInput = `00100
-11110
-10110
-10111
-10101
-01111
-00111
-11100
-10000
-11001
-00010
-01010`;
-const testData = testInput.split('\n').map((el) =>
-  el
-    .split('')
-    .map(Number)
-    .filter((num): num is 1 | 0 => num === 1 || num === 0),
-);
-
 const find = (
   arr: number[][],
   comparator = (a: number, b: number) => a > b,
