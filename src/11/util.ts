@@ -3,8 +3,8 @@ import * as path from 'path';
 
 const input = fs
   .readFileSync(path.join(__dirname, 'input.txt'), 'utf-8')
+  .trim()
   .split('\n');
-input.pop();
 
 export const data: [number, boolean][][] = input.map((row) =>
   row.split('').map((oct) => [Number(oct), false]),
