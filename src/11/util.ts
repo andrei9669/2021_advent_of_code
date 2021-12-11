@@ -24,7 +24,7 @@ function* coords() {
 export const flash =
   (y: number, arr: [number, boolean][][], flashCountCallback?: () => void) =>
   ([oct]: [number, boolean], x: number): void => {
-    if (oct > 9) return;
+    if (oct < 10) return;
     flashCountCallback?.();
     arr[y][x] = [0, false];
     // eslint-disable-next-line no-restricted-syntax -- using generator
