@@ -1,16 +1,13 @@
 import { data, flash } from './util';
 
-const run = (arr: [number, boolean][][]): number => {
-  let flashes = 0;
-  for (let i = 0; i < 100; i++) {
-    arr.forEach((row, y) => {
-      row.forEach(([num], x) => {
-        arr[y][x] = [num + 1, true];
-      });
+for (let i = 0, flashes = 0; i < 100; i++) {
+  data.forEach((row, y) => {
+    row.forEach(([num], x) => {
+      data[y][x] = [num + 1, true];
     });
-    arr.forEach((row, y) => row.forEach(flash(y, arr, () => flashes++)));
-  }
-  return flashes;
-};
-console.log('finish', run(data));
+  });
+  data.forEach((row, y) => row.forEach(flash(y, data, () => flashes++)));
+  if (i === 99) console.log('11-1', flashes);
+}
+
 export {};
