@@ -1,11 +1,14 @@
 import fs from 'fs';
 import * as path from 'path';
 
-export const increment = (row: string[], y: number, arr: string[][]): void => {
-  row.forEach((oct, x) => {
-    arr[y][x] = (Number(oct.split('')[0]) + 1).toString();
-  });
-};
+const input = fs
+  .readFileSync(path.join(__dirname, 'input.txt'), 'utf-8')
+  .split('\n');
+input.pop();
+
+export const data: [number, boolean][][] = input.map((row) =>
+  row.split('').map((oct) => [Number(oct), false]),
+);
 
 function* coords() {
   yield [-1, -1];
@@ -18,31 +21,22 @@ function* coords() {
   yield [+1, +1];
 }
 
-export const flash = (
-  arr: string[][],
-  x: number,
-  y: number,
-  callback?: () => void,
-): void => {
-  callback?.();
-  arr[y][x] = `${0}x`;
-  // eslint-disable-next-line no-restricted-syntax -- using generator
-  for (const [Y, X] of coords()) {
-    if (
-      arr[y + Y]?.[x + X] !== undefined &&
-      arr[y + Y][x + X].split('')[1] !== 'x'
-    ) {
-      const num = Number(arr[y + Y][x + X]) + 1;
-      if (num > 9) {
-        flash(arr, x + X, y + Y, callback);
-      } else {
-        arr[y + Y][x + X] = num.toString();
+export const flash =
+  (y: number, callback?: () => void) =>
+  ([oct]: [number, boolean], x: number, arr: [number, boolean][][]): void => {
+    if (oct > 9) {
+      callback?.();
+      arr[y][x] = [0, false];
+      // eslint-disable-next-line no-restricted-syntax -- using generator
+      for (const [Y, X] of coords()) {
+        const [num, bool] = arr[y + Y]?.[x + X] ?? [0, false];
+        if (bool) {
+          if (num + 1 > 9) {
+            flash(y + Y, callback)([num + 1, true], x + X, arr);
+          } else {
+            arr[y + Y][x + X] = [num + 1, true];
+          }
+        }
       }
     }
-  }
-};
-
-export const data = fs
-  .readFileSync(path.join(__dirname, 'input.txt'), 'utf-8')
-  .split('\n')
-  .map((row) => row.split('').map((oct) => `${oct}x`));
+  };

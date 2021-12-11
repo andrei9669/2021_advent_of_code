@@ -1,20 +1,22 @@
-import { data, flash, increment } from './util';
+import { data, flash } from './util';
 
-const run = (arr: string[][]): number => {
+const run = (arr: [number, boolean][][]): number => {
   let steps = 0;
   let finish = false;
-
-  while (!finish) {
-    steps++;
-    arr.forEach(increment);
+  for (; !finish; steps++) {
+    arr.forEach((row, y) => {
+      row.forEach(([num], x) => {
+        arr[y][x] = [num + 1, true];
+      });
+    });
     arr.forEach((row, y) =>
       row.forEach((oct, x) => {
-        if (Number(oct) > 9) {
-          flash(arr, x, y);
+        if (oct[0] > 9) {
+          flash(y)(oct, x, arr);
         }
       }),
     );
-    finish = arr.every((row) => row.every((oct) => oct.split('')[1] === 'x'));
+    finish = arr.every((row) => row.every(([, oct]) => oct));
   }
   return steps;
 };
