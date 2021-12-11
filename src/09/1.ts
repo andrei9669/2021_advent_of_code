@@ -23,7 +23,7 @@ function* getNextCoordinate() {
   yield [0, +1];
 }
 
-const res: [number, number][] = [];
+let res: [number, number][] = [];
 
 const run = (
   arr: [number, number][][],
@@ -35,6 +35,7 @@ const run = (
   if (curNum === 9) {
     return undefined;
   }
+  let next: undefined | [number, number];
   // eslint-disable-next-line no-restricted-syntax -- generator
   for (const [nextX, nextY] of getNextCoordinate()) {
     const [num] = arr[y + nextY]?.[x + nextX] ?? [
@@ -42,22 +43,18 @@ const run = (
       true,
     ];
     if (num < curNum) {
-      finalNum = run(arr, x + nextX, y + nextY);
+      next = [x + nextX, y + nextY];
       break;
     }
-    if (num > curNum && finalNum === undefined) {
-      finalNum = [x, y];
-    }
   }
-
+  if (next !== undefined) {
+    finalNum = run(arr, next[0], next[1]);
+  }
+  if (finalNum === undefined) {
+    finalNum = [x, y];
+  }
   arr[y][x] = [curNum, arr[y][x][1] + 1];
-  const coordinateExists = res.find(
-    (el) => el[0] === finalNum?.[0] && el[1] === finalNum?.[1],
-  );
-  if (coordinateExists === undefined) {
-    return finalNum;
-  }
-  return undefined;
+  return finalNum;
 };
 
 data.forEach((row, y) => {
@@ -68,10 +65,14 @@ data.forEach((row, y) => {
     }
   });
 });
+res = res.filter(
+  ([x, y], i) => res.findIndex(([X, Y]) => x === X && y === Y) === i,
+);
 
 const basins = res
   .map(([x, y]) => data[y][x][0])
   .reduce((acc, cur) => acc + cur + 1, 0);
+
 console.log(basins);
 const result = res.map(([x, y]) => data[y][x][1]).sort((a, b) => b - a);
 const [one, two, three] = result;
