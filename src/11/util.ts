@@ -18,7 +18,7 @@ function* coords() {
   yield [+1, +1];
 }
 
-export const flashUtil = (
+export const flash = (
   arr: string[][],
   x: number,
   y: number,
@@ -34,7 +34,7 @@ export const flashUtil = (
     ) {
       const num = Number(arr[y + Y][x + X]) + 1;
       if (num > 9) {
-        flashUtil(arr, x + X, y + Y, callback);
+        flash(arr, x + X, y + Y, callback);
       } else {
         arr[y + Y][x + X] = num.toString();
       }

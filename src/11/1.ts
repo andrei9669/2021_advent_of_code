@@ -1,4 +1,4 @@
-import { data, flashUtil, increment } from './util';
+import { data, flash, increment } from './util';
 
 const run = (arr: string[][]): number => {
   let flashes = 0;
@@ -8,7 +8,7 @@ const run = (arr: string[][]): number => {
     arr.forEach((row, y) =>
       row.forEach((oct, x) => {
         if (Number(oct) > 9) {
-          flashUtil(arr, x, y, () => {
+          flash(arr, x, y, () => {
             flashes++;
           });
         }
