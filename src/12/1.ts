@@ -27,8 +27,12 @@ const graph = data.reduce<Record<string, Vertex>>((acc, [edge1, edge2]) => {
   if (acc[edge2] === undefined) {
     acc[edge2] = getEdge(edge2);
   }
-  acc[edge1].vertices[edge2] = acc[edge2];
-  acc[edge2].vertices[edge1] = acc[edge1];
+  if (edge2 !== 'start') {
+    acc[edge1].vertices[edge2] = acc[edge2];
+  }
+  if (edge1 !== 'start') {
+    acc[edge2].vertices[edge1] = acc[edge1];
+  }
   return acc;
 }, {});
 
@@ -36,34 +40,23 @@ const traverse = (
   vertexKey: string,
   doubleVisited: boolean,
 ): string[][] | undefined => {
+  if (vertexKey === 'end') return [[vertexKey]];
   const vertex = graph[vertexKey];
   let double = doubleVisited;
-  if (vertexKey === 'end') {
-    return [[vertexKey]];
-  }
-  if (vertex.visited === 2 || (doubleVisited && vertex.visited === 1)) {
+  if (vertex.visited === 2 || (doubleVisited && vertex.visited === 1))
     return undefined;
-  }
-  if (vertex.isSmall) {
-    vertex.visited++;
-    if (!doubleVisited && vertex.visited === 2) {
-      double = true;
+  if (vertex.isSmall) vertex.visited++;
+  if (!doubleVisited && vertex.visited === 2) double = true;
+  const keys = Object.keys(vertex.vertices);
+  const pathVertices = keys.reduce((acc, childVertex) => {
+    const vertexPaths = traverse(childVertex, double);
+    if (vertexPaths !== undefined) {
+      vertexPaths.forEach((el) => el.unshift(vertexKey));
+      acc.push(vertexPaths);
     }
-  }
-  const pathVertices: string[][][] = [];
-  Object.keys(vertex.vertices).forEach((childVertex) => {
-    if (childVertex !== 'start') {
-      const vertexPaths = traverse(childVertex, double);
-      if (vertexPaths !== undefined) {
-        vertexPaths.forEach((el) => el.unshift(vertexKey));
-        pathVertices.push(vertexPaths);
-      }
-    }
-  });
+    return acc;
+  }, [] as string[][][]);
   vertex.visited--;
   return pathVertices.flat();
 };
-const t = traverse('start', false);
-const result = t?.map((row) => row.join(','));
-console.log(result?.length);
-// 118803
+console.log(traverse('start', false)?.length);
