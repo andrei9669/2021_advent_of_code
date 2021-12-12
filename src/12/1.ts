@@ -1,10 +1,6 @@
 import fs from 'fs';
 import path from 'path';
 
-const input = fs
-  .readFileSync(path.join(__dirname, 'input.txt'), 'utf-8')
-  .trim();
-
 type Vertex = {
   edge: string;
   vertices: Record<string, Vertex>;
@@ -13,7 +9,10 @@ type Vertex = {
 };
 type U = undefined;
 
+const text = fs.readFileSync(path.join(__dirname, 'input.txt'), 'utf-8');
+const input = text.trim();
 const data = input.split('\n').map((row) => row.split('-'));
+
 const getEdge = (edge: string) => ({
   edge,
   vertices: {},
