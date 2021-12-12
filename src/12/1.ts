@@ -36,7 +36,7 @@ const traverse = (vertexKey: string, dVisited = false): string[][] | U => {
   if (vertex.visited === 2 || (dVisited && vertex.visited === 1))
     return undefined;
   if (vertex.isSmall) vertex.visited++;
-  if (!dVisited && vertex.visited === 2) doubleVisited = true;
+  if (!doubleVisited && vertex.visited === 2) doubleVisited = true;
   const keys = Object.keys(vertex.vertices);
   const pathVertices = keys.reduce((acc, childVertex) => {
     const vertexPaths = traverse(childVertex, doubleVisited);
