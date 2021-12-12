@@ -32,14 +32,14 @@ const graph = data.reduce<Record<string, Vertex>>((acc, [edge1, edge2]) => {
 const traverse = (vertexKey: string, dVisited = false): string[][] | U => {
   if (vertexKey === 'end') return [[vertexKey]];
   const vertex = graph[vertexKey];
-  let double = dVisited;
+  let doubleVisited = dVisited;
   if (vertex.visited === 2 || (dVisited && vertex.visited === 1))
     return undefined;
   if (vertex.isSmall) vertex.visited++;
-  if (!dVisited && vertex.visited === 2) double = true;
+  if (!dVisited && vertex.visited === 2) doubleVisited = true;
   const keys = Object.keys(vertex.vertices);
   const pathVertices = keys.reduce((acc, childVertex) => {
-    const vertexPaths = traverse(childVertex, double);
+    const vertexPaths = traverse(childVertex, doubleVisited);
     if (vertexPaths !== undefined) {
       vertexPaths.forEach((el) => el.unshift(vertexKey));
       acc.push(vertexPaths);
