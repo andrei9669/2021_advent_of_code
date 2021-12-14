@@ -37,15 +37,5 @@ template.forEach((polymer) => {
   }
   polymerCount[polymer]++;
 });
-let mostCommon = Number.MIN_SAFE_INTEGER;
-let leastCommon = Number.MAX_SAFE_INTEGER;
-Object.values(polymerCount).forEach((count) => {
-  if (count < leastCommon) {
-    leastCommon = count;
-  }
-  if (count > mostCommon) {
-    mostCommon = count;
-  }
-});
-console.log(mostCommon - leastCommon);
-// console.log(template.join(''));
+const values = Object.values(polymerCount);
+console.log(Math.max(...values) - Math.min(...values));
