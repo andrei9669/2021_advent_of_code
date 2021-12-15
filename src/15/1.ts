@@ -65,14 +65,9 @@ class Graph {
     }
 
     let currVertex = Graph.vertexWithMinDistance(distances, visited);
-    // progress log, high effect on performance
-    // let sum = 0;
-    // let measurements = 0;
 
     while (currVertex !== null) {
       if (currVertex === finish) fin = distances[currVertex] ?? 0;
-      // progress log, high effect on performance
-      // const t1 = performance.now();
       const distance = distances[currVertex];
       if (distance !== undefined) delete touched[currVertex];
 
@@ -86,13 +81,6 @@ class Graph {
       });
       visited.add(currVertex);
       currVertex = Graph.vertexWithMinDistance(touched, visited);
-      // progress log, high effect on performance
-      // const t2 = performance.now();
-      // sum += t2 - t1;
-      // const average = sum / ++measurements;
-      // process.stdout.write(
-      //   `\r${this.vertices.length - visited.size} - ${average}`,
-      // );
     }
     return fin;
   }
@@ -117,7 +105,6 @@ class Graph {
 const getVertex = (x: number, y: number) =>
   `${y.toString().padStart(5, '0')}_${x.toString().padStart(5, '0')}`;
 
-const t11 = performance.now();
 const graph = new Graph();
 const expanded = getMap(5);
 
@@ -138,8 +125,4 @@ expanded.forEach((row, y) =>
 console.log('edges:', Object.keys(graph.adjacencyList).length);
 const [y, x] = [expanded.length - 1, expanded[0].length - 1];
 const risk = graph.dijkstra(getVertex(0, 0), getVertex(x, y));
-const t12 = performance.now();
 console.log(`\n${risk}`);
-console.log((t12 - t11) / 1000);
-// part1 - 581
-// part2 - 2916
