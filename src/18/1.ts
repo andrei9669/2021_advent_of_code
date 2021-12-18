@@ -83,95 +83,51 @@ const childrenAreNumbers = (
 ): n is [number, number] =>
   n.every((el): el is number => typeof el === 'number');
 
-const addToRightArray = (inp: NestedArray, val: number): boolean => {
+const addToArray = (inp: NestedArray, val: number, left: boolean): boolean => {
+  const i = left ? 1 : 0;
   if (Array.isArray(inp)) {
-    const child = inp[0];
+    const child = inp[i];
     if (Array.isArray(child)) {
-      const added = addToRightArray(child, val);
+      const added = addToArray(child, val, left);
       if (!added) {
-        child[0] = val;
+        child[i] = val;
         return true;
       }
       return added;
     }
-    inp[0] = child + val;
+    inp[i] = child + val;
     return true;
   }
   return false;
 };
-// const addToArray =(inp: NestedArray, val: number, i:1|0): boolean{
-//
-// }
-const addToLeftArray = (inp: NestedArray, val: number): boolean => {
-  if (Array.isArray(inp)) {
-    const child = inp[1];
-    if (Array.isArray(child)) {
-      const added = addToLeftArray(child, val);
-      if (!added) {
-        child[1] = val;
-        return true;
-      }
-      return added;
-    }
-    inp[1] = child + val;
-    return true;
-  }
-  return false;
-};
-const addToLeft = (
+const addTo = (
   current: NestedArray,
   val: number,
+  left: boolean,
   prev?: NestedArray,
 ): boolean => {
+  const i = left ? 0 : 1;
   const { parent } = current;
   if (parent === undefined) {
-    const currentLastChild = current[0];
+    const currentLastChild = current[i];
     if (prev === currentLastChild) {
       return false;
     }
     if (Array.isArray(currentLastChild)) {
-      return addToLeftArray(currentLastChild, val);
+      return addToArray(currentLastChild, val, left);
     }
-    current[1] = val + currentLastChild;
+    current[i] = val + currentLastChild;
     return true;
   }
-  const firstChild = parent[0];
+  const firstChild = parent[i];
   if (current !== firstChild && Array.isArray(firstChild)) {
-    return addToLeftArray(firstChild, val);
+    return addToArray(firstChild, val, left);
   }
   if (typeof firstChild === 'number') {
-    parent[0] = firstChild + val;
+    parent[i] = firstChild + val;
     return true;
   }
-  return addToLeft(parent, val, current);
-};
-
-const addToRight = (
-  current: NestedArray,
-  val: number,
-  prev?: NestedArray,
-): boolean => {
-  const { parent } = current;
-  if (parent === undefined) {
-    const currentLastChild = current[1];
-    if (currentLastChild === prev) {
-      return false;
-    }
-    if (Array.isArray(currentLastChild)) {
-      return addToRightArray(currentLastChild, val);
-    }
-    current[1] = currentLastChild + val;
-    return true;
-  }
-  const firstChild = parent[1];
-  if (current !== firstChild && Array.isArray(firstChild)) {
-    return addToRightArray(firstChild, val);
-  }
-  if (typeof firstChild === 'number') {
-    parent[1] = firstChild + val;
-    return true;
-  }
-  return addToRight(parent, val, current);
+  return addTo(parent, val, left, current);
 };
 
 const explode = (current: NestedArray) => {
@@ -183,18 +139,18 @@ const explode = (current: NestedArray) => {
     if (typeof right === 'number') {
       current.parent[indexInParent + 1] = right + b;
     } else if (Array.isArray(right)) {
-      addToRightArray(right, b);
+      addToArray(right, b, false);
     } else {
-      addToRight(current, b);
+      addTo(current, b, false);
     }
 
     const left = current.parent[indexInParent - 1];
     if (typeof left === 'number') {
       current.parent[indexInParent - 1] = left + a;
     } else if (Array.isArray(left)) {
-      addToLeftArray(left, a);
+      addToArray(left, a, true);
     } else {
-      addToLeft(current, a);
+      addTo(current, a, true);
     }
 
     current.parent[indexInParent] = 0;
@@ -287,7 +243,8 @@ console.log('fin');
 console.log(log(fin), calcAnswer(fin));
 
 const rows = input.length;
-let result = 0;
+
+// let result = 0;
 // for (let i = 0; i < rows; i++) {
 //   for (let j = 0; j < rows; j++) {
 //     if (i !== j) {
@@ -306,19 +263,19 @@ let result = 0;
 //     }
 //   }
 // }
-const left = getNumbers(8);
-const right = getNumbers(0);
-const res = main([left, right] as NestedArray);
-const [calcRes] = calcAnswer(res);
-if (calcRes > result) {
-  result = calcRes;
-  console.log('------------------------------');
-  console.log(log(left));
-  console.log(log(right));
-  console.log(8, 0);
-  console.log('------------------------------');
-}
-
-console.log(result);
+// const left = getNumbers(8);
+// const right = getNumbers(0);
+// const res = main([left, right] as NestedArray);
+// const [calcRes] = calcAnswer(res);
+// if (calcRes > result) {
+//   result = calcRes;
+//   console.log('------------------------------');
+//   console.log(log(left));
+//   console.log(log(right));
+//   console.log(8, 0);
+//   console.log('------------------------------');
+// }
+//
+// console.log(result);
 
 export {};
