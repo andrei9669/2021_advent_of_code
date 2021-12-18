@@ -33,3 +33,5 @@ const polymerCount = template.reduce<Record<string, number>>((acc, polymer) => {
 
 const values = Object.values(polymerCount);
 console.log(Math.max(...values) - Math.min(...values));
+
+export {};

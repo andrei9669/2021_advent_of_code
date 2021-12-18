@@ -51,3 +51,4 @@ Object.keys(letterCounts).forEach((key) => {
 
 const values = Object.values(letterCounts);
 console.log(Math.max(...values) - Math.min(...values));
+export {};

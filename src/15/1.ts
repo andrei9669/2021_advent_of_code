@@ -126,3 +126,5 @@ console.log('edges:', Object.keys(graph.adjacencyList).length);
 const [y, x] = [expanded.length - 1, expanded[0].length - 1];
 const risk = graph.dijkstra(getVertex(0, 0), getVertex(x, y));
 console.log(`\n${risk}`);
+
+export {};

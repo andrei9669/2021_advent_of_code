@@ -53,3 +53,4 @@ instructions.forEach((instruction) => {
     });
 });
 console.log(dotTable.map((row) => row.join('')).join('\n'));
+export {};
