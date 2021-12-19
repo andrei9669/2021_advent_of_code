@@ -20,32 +20,15 @@ const getChunk = (str: string, size = 5): string[] => {
   return chunks.filter((el) => el.length === size);
 };
 
-const sum = (acc: number, cur: number): number => acc + cur;
-const product = (acc: number, cur: number): number => acc * cur;
-const min = (numbers: number[]): number => Math.min(...numbers);
-const max = (numbers: number[]): number => Math.max(...numbers);
-const greaterThan = ([a, b]: number[]): number => (a > b ? 1 : 0);
-const lessThan = ([a, b]: number[]): number => (a < b ? 1 : 0);
-const equalTo = ([a, b]: number[]): number => (a === b ? 1 : 0);
-
 const calc = (type: number, values: number[]): number => {
-  switch (type) {
-    case 7:
-      return equalTo(values);
-    case 6:
-      return lessThan(values);
-    case 5:
-      return greaterThan(values);
-    case 3:
-      return max(values);
-    case 2:
-      return min(values);
-    case 1:
-      return values.reduce(product, 1);
-    default:
-    case 0:
-      return values.reduce(sum, 0);
-  }
+  const [a, b] = values;
+  if (type === 7) return a === b ? 1 : 0;
+  if (type === 6) return a < b ? 1 : 0;
+  if (type === 5) return a > b ? 1 : 0;
+  if (type === 3) return Math.max(...values);
+  if (type === 2) return Math.min(...values);
+  if (type === 1) return values.reduce((acc, cur) => acc * cur, 1);
+  return values.reduce((acc, cur) => acc + cur, 0);
 };
 
 const run = (binary: string): { packetLength: number; value: number } => {
